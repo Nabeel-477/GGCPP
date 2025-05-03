@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>University Management System</title>
+  <link rel="stylesheet" href="ums-style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+</head>
+<body onload="showWelcome()">
+
+  <!-- Welcome Screen -->
+  <div id="welcomeScreen" class="centered">
+    <h1>Welcome to My University</h1>
+    <button onclick="startSystem()">Start System</button>
+  </div>
+
+  <!-- Login Screen -->
+  <div id="loginScreen" style="display:none;" class="centered">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Username"><br>
+    <input type="password" id="password" placeholder="Password"><br>
+    <button onclick="login()">Login</button>
+  </div>
+
+  <!-- Main System -->
+  <div id="mainSystem" style="display:none;">
+    <h2>University Management System</h2>
+    <div class="tabs">
+      <button onclick="openTab('main')">Main</button>
+      <button onclick="openTab('newInfo')">New Information</button>
+      <button onclick="openTab('viewDetail')">View Detail</button>
+      <button onclick="openTab('attendance')">Attendance</button>
+      <button onclick="openTab('leaves')">Apply Leaves</button>
+      <button onclick="openTab('fee')">Fee Structure</button>
+      <button onclick="openTab('utility')">Utility</button> <!-- Utility Tab -->
+      <button onclick="exitWebsite()">Exit</button>
+
+      <div id="goodbyeMessage" style="display:none; font-size:24px; color:red; margin-top:20px;">
+        Goodbye! 👋
+      </div>
+    </div>
+
+    <!-- New Info Tab -->
+    <div class="tabContent" id="newInfo">
+      <h3>Add New Student/Teacher</h3>
+      <input id="name" placeholder="Full Name"><br>
+      <input id="roll" placeholder="Roll Number"><br>
+      <input id="address" placeholder="Address"><br>
+      <input type="date" id="dob" placeholder="Date of Birth"><br>
+
+      <input id="cnic" placeholder="CNIC"><br>
+      <input id="email" placeholder="Email"><br>
+      <select id="role">
+        <option>Student</option>
+        <option>Teacher</option>
+      </select><br>
+      <select id="department">
+        <option>BSCS</option>
+        <option>BS ENGLISH</option>
+        <option>BS URDU</option>
+        <option>BS MATH</option>
+        <option>B.Ed</option>
+        <option>Other</option>
+      </select><br>
+      <button onclick="saveInfo()">Save</button>
+      <button onclick="refreshNewInfo()">Refresh</button>
+      </div>
+
+    <!-- View Detail Tab -->
+    <div class="tabContent" id="viewDetail">
+      <h3>View Records</h3>
+      <select id="filterDept" onchange="showSavedInfo()">
+        <option value="">-- All Departments --</option>
+        <option>BSCS</option>
+        <option>BS ENGLISH</option>
+        <option>BS URDU</option>
+        <option>BS MATH</option>
+        <option>B.Ed</option>
+        <option>Other</option>
+      </select>
+<input type="text" id="searchInput" placeholder="Search by name or roll number" oninput="searchInfo()">
+<hr>
+
+      <div id="savedData"></div>
+<br><button onclick="clearViewInfo()">Clear View Tab Info</button>
+</div>
+
+    <!-- Attendance Tab -->
+    <div class="tabContent" id="attendance">
+      <h3>Add Attendance</h3>
+      <select id="attDept">
+        <option>BSCS</option>
+        <option>BS ENGLISH</option>
+        <option>BS URDU</option>
+        <option>BS MATH</option>
+        <option>B.Ed</option>
+        <option>Other</option>
+      </select><br>
+      <input id="attName" placeholder="Name"><br>
+      <select id="status">
+        <option>Present</option>
+        <option>Absent</option>
+      </select><br>
+      <button onclick="saveAttendance()">Save Attendance</button>
+      <button onclick="deleteAllAttendance()">Delete All Attendance</button>
+      
+
+
+      <div id="attendanceRecords"></div>
+    </div>
+
+    <!-- Leaves Tab -->
+    <div class="tabContent" id="leaves">
+      <h3>Apply Leave</h3>
+      <select id="leaveDept">
+        <option>BSCS</option>
+        <option>BS ENGLISH</option>
+        <option>BS URDU</option>
+        <option>BS MATH</option>
+        <option>B.Ed</option>
+        <option>Other</option>
+      </select><br>
+      <input id="leaveName" placeholder="Name"><br>
+      <input id="leaveReason" placeholder="Reason"><br>
+      <button onclick="saveLeave()">Save Leave</button>
+     <button onclick="deleteAllLeaves()">Delete All Leaves</button>
+
+      <div id="leaveRecords"></div>
+    </div>
+
+    <!-- Fee Structure Tab -->
+    <div class="tabContent" id="fee">
+      <h2>Fee Structure</h2>
+     <button onclick="addRow()">Add Student</button>
+<button onclick="exportToExcel()">Export to Excel</button>
+<button onclick="saveAllFeeRows()">Save All</button> <!-- ✅ New Save Button -->
+<button onclick="deleteAllFeeRecords()">Delete All Fee Records</button>
+<!-- Save Button -->
+<button type="button" onclick="saveStudentRecord()">Save</button>
+
+      <table id="feeTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Department</th>
+            <th>Fee</th>
+            <th>Fines</th>
+            <th>Clear</th>
+            <th>Remaining Amount</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Rows will be inserted here -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Utility Tab -->
+    <div class="tabContent" id="utility">
+       <button onclick="openCalculator()">Open Calculator</button><br><br>
+      <button onclick="openNotepad()">Open Notepad</button><br><br>
+      <button onclick="openExcel()">Open Excel Sheet</button><br><br>
+    </div>
+    <!-- Main Tab -->
+    <div class="tabContent" id="main" style="display:none;">
+      <div id="passport-container">
+        <img id="passport" src="1744367947426-removebg-preview (1).png" alt="Passport Photo">
+      </div>
+      <div id="developer-info">
+        <p>Developed by Nabeel Aslam Jaat</p>
+      </div>
+      <div id="university-info">
+        <p>This application is developed by a student of Graduate College Pattoki, affiliated with the University of the Punjab. 
+<br>
+🌟 Credit Line for Website 🌟
+"This website is humbly dedicated to my respected teacher Sir "Waqas Mahmood" whose guidance
+<br> inspiration, and encouragement made this project possible."</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Link to the JavaScript file -->
+  <script src="ums-script.js"></script>
+</body>
+</html>
