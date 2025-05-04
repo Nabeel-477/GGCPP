@@ -23,7 +23,7 @@ function login() {
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
 
-  if (username === "nabeel" && password === "12345") {
+  if (username === "nabeel" && password === "123456") {
     document.getElementById("loginScreen").style.display = "none";
     document.getElementById("mainSystem").style.display = "block";
     openTab('newInfo');
